@@ -1,0 +1,161 @@
+DataBase(자료들의 집합) = DB
+3대 기능(정의기능, 조작기능, 제어기능)
+
+- 물리적 
+저장된DB 눈으로 볼 수 없음
+
+- 논리적 
+DBMS(정의어(DDL), 조작어(DML), 제어어(DCL)) => 데이터베이스 관리자(DBA)
+조작(기능)어 [SQL] = 선택(select), 추가(insert), 변경(update), 삭제(delete)
+
+DB관리자 => DBA(관리자=DB정의,조작,제어)
+일반사용자 => SQL을 사용하여 선택,추가,변경,삭제
+응용프로그래머 => 외부(응용)프로그램 내부에 SQL을 사용
+
+
+1. DDL(정의어)
+  1-1. DB생성(create)
+  1-2. DB구조변경(alter)
+  1-3. DB삭제(drop)
+2. DML(조작어)
+  2-1. 자료선택(select) SELECT  FROM  WHRER;
+  2-2. 자료삽입(insert)  INSERT INTO  VALUES;
+  2-3. 자료삭제(delete)  UPDATE SET WHERE;
+  2-4. 자료변경(update)  DELETE FROM  WHERE;
+3. DCL(제어어)
+  3-1. 권한설정(grant)
+  3-2. 권한해제(revoke)
+
+
+
+내부 조인(교집합)
+SELECT 필드명(속성명)
+FROM  테이블1 INNER JOIN 테이블2 ON 조건식;
+
+
+
+
+
+
+- SELECT 기본형
+SELECT 필드명...
+FROM 인적사항;
+
+- SELECT 조건
+SELECT 필드명...
+FROM 테이블명
+WHERE 조건식;
+
+- SELECT 내부조인
+SELECT 필드명...
+FROM 테이블명 INNER JOIN 테이블명 ON 조인식;
+
+- SELECT 정렬
+SELECT 필드명...
+FROM 테이블명
+ORDER BY 필드명 (ASC or DESC);
+                  오름차순 or 내림차순
+                 (생략가능)
+
+- SELECT 그룹(조건WHERE 사용X)
+SELECT 필드명... 그룹합수...
+FROM 테이블
+GROUP BY 필드명;
+
+- SELECT 그룹(조건WHERE 사용O = HAVING)
+SELECT 필드명... 그룹합수...
+FROM 테이블
+GROUP BY 필드명
+HAVING 조건식;
+
+
+
+
+
+문제 1
+'수강신청' 테이블로부터 '수강과목1'이 '국어'인 사람의 '학번'과 '수강과목1'을 선택하시오.
+
+SELECT 학번,수강과목1
+FROM 수강신청
+WHERE (수강과목1)='국어';
+
+
+문제2
+'인적사항' 테이블에서 '생년월일'이 '1998-05-01'일 이후 출생자의 성명과 주소를 선택하시오.
+
+SELECT 성명,주소
+FROM 인적사항
+WHERE (생년월일)>='#1998-05-01#';
+
+
+[예제]
+1. '성적' 테이블로부터 '합계'점수가 '250점' 이상인 사람의 '성명','국어','영어','수학'과 '합계'점수를 출력하시오
+SELECT 성명,국어,영어,수학
+FROM 성적
+WHERE (합계)>=250;
+
+2. '성적' 테이블과 '인적사항' 테이블을 이용하여 '국어'점수가 95점 이상인 사람의 '성명', 주소','국어'를 출력하시오.
+SELECT 인적사항.성명,주소,국어
+FROM 성적 INNER JOIN 인적사항 ON 성적.성명 = 인적사항.성명
+WHERE 국어>=95;
+
+
+3. '인적사항' 테이블의 모든 필드를 '성명'의 오름차순으로 정렬하여 출력하시오
+SELECT 학번, 성명, 전화번호, 주소, 생년월일, 성별
+FROM 인적사항
+ORDER BY 성명 ASC;
+
+
+4. '성적','수강신청','인적사항' 테이블들을 이용하여 '합계'점수가 300점인 학생의 '학번','성명','수강과목1','수강과목2','합계' 점수를 '합계'점수의 오름차순으로 정렬하여 출력하시오.
+(참고 : '성적'과 '인적사항'테이블은 '성명'으로 조인되며 '인적사항'과 '수강신청' 테이블은 '학번'으로 조인됨)
+SELECT 인적사항.학번,성적.성명,수강과목1,수강과목2,합계
+FROM (인적사항 INNER JOIN 성적 ON 인적사항.성명=성적.성명) INNER JOIN 수강신청 ON 인적사항.학번=수강신청.학번
+WHERE 합계=300
+ORDER BY 합계ASC;
+
+
+5. '매출' 테이블로부터 '매출일'과 '판매처' '수량'과 '단가'를 이용하여 '금액'을 구하시오.
+SELECT 판매처,SUM(수량*단가) AS 금액
+FROM 매출
+GROUP BY 판매처;
+
+
+6. '매출'테이블에서 각 상사별 거래건수를 내림차순으로 정렬하여 출력하시오
+SELECT 판매처,COUNT(단가) AS 거래횟수
+FROM 매출
+GROUP BY 판매처
+ORDER BY COUNT(단가) DESC;
+
+
+7. '매출'테이블에서 각 상사별 거래건수가 3건 이상인 판매처를 내림차순으로 정렬하여 출력하시오
+SELECT 판매처
+FROM 매출
+GROUP BY 판매처
+HAVING COUNT(판매처)>=3
+ORDER BY 판매처 DESC;
+
+
+
+
+SELECT 필드명...
+FROM 테이블명
+WHERE 조건식
+ORDER BY 필드명 [ASC,
+
+조건(WHERE)식
+1. and, or
+2. >, >=, <, <=, =, <>
+3. between
+4. in( ), not in( )
+5. like (텍스트에서 사용가능)
+
+
+
+
+
+
+
+
+
+
+
